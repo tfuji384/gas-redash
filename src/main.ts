@@ -37,13 +37,22 @@ class Client {
         return this.get(url)['query_result']['data']['rows'];
     }
 
+    getQueryResultAsCSV(queryId: number) {
+        const endpoint: string = `queries/${queryId}/results.csv`;
+        const url = this.buildUrl(endpoint);
+        return this.get(url);
+    }
+
     /**
     * @param {number} queryId
     */
-    getFreshQueryResult(queryId: number) {
+    getFreshQueryResult(queryId: number, csv = false) {
         const response = this.refresh(queryId);
         const job = response.job;
         this.pollingJob(job);
+        if (csv) {
+            return this.getQueryResultAsCSV(queryId);
+        }
         return this.getQueryResult(queryId);
     }
 
