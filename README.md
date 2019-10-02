@@ -1,7 +1,5 @@
 # gas-redash
 
-===
-
 GASからRedashのAPIを叩くライブラリが欲しかったけどなかったので作った
 
 ## usage
