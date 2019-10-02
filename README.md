@@ -8,7 +8,7 @@ GASからRedashのAPIを叩くライブラリが欲しかったけどなかっ�
 
 ## サンプルコード
 
-```.gs
+```.js
 function myFunction() {
     const client = redash.create(REDASH_BASE_URL, PERSONAL_ACCESS_KEY);
     const res = client.getRefreshedQueryResult(QUERY_ID);
