@@ -46,7 +46,7 @@ class Client {
     /**
     * @param {number} queryId
     */
-    getFreshQueryResult(queryId: number, csv = false) {
+    getRefreshedQueryResult(queryId: number, csv = false) {
         const response = this.refresh(queryId);
         const job = response.job;
         this.pollingJob(job);
