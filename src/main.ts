@@ -31,35 +31,35 @@ class Client {
     /**
     * @param {number} queryId
     */
-    getQueryResult(queryId: number) {
+    fetchQueryResult(queryId: number) {
         const endpoint: string = `queries/${queryId}/results.json`;
         const url = this.buildUrl(endpoint);
-        return this.get(url)['query_result']['data']['rows'];
+        return this._get(url)['query_result']['data']['rows'];
     }
 
-    getQueryResultAsCSV(queryId: number) {
+    fetchQueryResultAsCSV(queryId: number) {
         const endpoint: string = `queries/${queryId}/results.csv`;
         const url = this.buildUrl(endpoint);
-        return this.get(url);
+        return this._get(url);
     }
 
     /**
     * @param {number} queryId
     */
-    getRefreshedQueryResult(queryId: number, csv = false) {
+    fetchRefreshedQueryResult(queryId: number, csv = false) {
         const response = this.refresh(queryId);
         const job = response.job;
         this.pollingJob(job);
         if (csv) {
-            return this.getQueryResultAsCSV(queryId);
+            return this.fetchQueryResultAsCSV(queryId);
         }
-        return this.getQueryResult(queryId);
+        return this.fetchQueryResult(queryId);
     }
 
     refresh(queryId: number) {
         const endpoint = `queries/${queryId}/refresh`;
         const url = this.buildUrl(endpoint);
-        return this.post(url);
+        return this._post(url);
     }
 
     pollingJob(job: Job) {
@@ -67,7 +67,7 @@ class Client {
         const url = this.buildUrl(endpoint);
         let count = 0;
         while (job.status != 3 && job.status != 4 && count < 100) {
-            let response = this.get(url);
+            let response = this._get(url);
             let job = response.job;
             Utilities.sleep(100);
             count++;
@@ -78,22 +78,22 @@ class Client {
         throw Error('failed to refrest Query!');
     }
 
-    private post(url: string) {
+    private _post(url: string) {
         const options = { method: 'post', headers: { 'Authorization': this.apiKey } };
-        return this.request(url, options);
+        return this._request(url, options);
     }
 
-    private get(url: string) {
+    private _get(url: string) {
         const options = { headers: { 'Authorization': this.apiKey } };
-        return this.request(url, options);
+        return this._request(url, options);
     }
 
-    private request(url: string, options: {}) {
+    private _request(url: string, options: {}) {
         const response = UrlFetchApp.fetch(url, options);
         return JSON.parse(response.getContentText());
     }
 
     private buildUrl(endpoint: String): string {
-        return `${this.baseUrl}/api/${endpoint}`
+        return `${this.baseUrl}/api/${endpoint}`;
     }
 }
